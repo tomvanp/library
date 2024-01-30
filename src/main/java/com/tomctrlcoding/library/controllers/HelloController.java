@@ -1,4 +1,4 @@
-package com.tomctrlcoding.library;
+package com.tomctrlcoding.library.controllers;
 
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.GET;
