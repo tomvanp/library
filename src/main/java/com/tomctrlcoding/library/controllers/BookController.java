@@ -8,12 +8,16 @@ import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Path("/books")
 @Singleton
 public class BookController {
+
+    private static Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Inject
     BookServiceInterface bookService;
@@ -40,7 +44,8 @@ public class BookController {
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Book> findBooksByGenre(@QueryParam("genre") String genre, @QueryParam("author") String author){
+    public List<Book> findBooksByGenre(@QueryParam("genre") Genre genre, @QueryParam("author") String author){
+        logger.info("QueryParams = {} , {}", author, genre);
         return bookService.findBooksByQueryParams(author, genre);
     }
 

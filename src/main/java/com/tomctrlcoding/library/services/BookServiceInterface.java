@@ -13,5 +13,5 @@ public interface BookServiceInterface {
 
     List<Book> findBooksByGenre(Genre genre);
 
-    List<Book> findBooksByQueryParams(String author, String genre);
+    List<Book> findBooksByQueryParams(String author, Genre genre);
 }

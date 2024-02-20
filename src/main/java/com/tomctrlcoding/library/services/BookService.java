@@ -5,11 +5,15 @@ import com.tomctrlcoding.library.model.Genre;
 import com.tomctrlcoding.library.repositories.BookRepositoryI;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.nosql.QueryMapper;
 import jakarta.nosql.document.DocumentTemplate;
+import org.eclipse.jnosql.communication.document.DocumentCondition;
+import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.mapping.Database;
 import org.eclipse.jnosql.mapping.DatabaseType;
 
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class BookService implements BookServiceInterface{
@@ -41,8 +45,23 @@ public class BookService implements BookServiceInterface{
     }
 
     @Override
-    public List<Book> findBooksByQueryParams(String author, String genre) {
+    public List<Book> findBooksByQueryParams(String author, Genre genre) {
         List<Book> books = bookRepository.findByAuthorOrGenre(author, genre);
+
+
+        //TODO experiment with this DocumentQuery builder and figure out DocumentCondition
+        var queryFrom = template.select(Book.class);
+        DocumentQuery.DocumentQueryBuilder query = DocumentQuery.builder();
+        query = query.select().from("Book");
+
+        // DocumentQuery test = query.select().from("Book").where()
+
+        if (Objects.nonNull(genre)){
+            // query = query.where("genre").eq(genre);
+        }
+        if (!author.isBlank() && !author.isEmpty()) {
+            // queryWhere = queryWhere.or("author").eq(author);
+        }
         return books;
     }
 }

@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface BookRepositoryI extends BasicRepository<Book,String> {
 
-    List<Book> findByAuthorOrGenre(String author, String genre);
+    List<Book> findByAuthorOrGenre(String author, Genre genre);
 }
