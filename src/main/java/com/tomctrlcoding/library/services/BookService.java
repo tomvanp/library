@@ -50,18 +50,30 @@ public class BookService implements BookServiceInterface{
 
 
         //TODO experiment with this DocumentQuery builder and figure out DocumentCondition
-        var queryFrom = template.select(Book.class);
+/*        var queryFrom = template.select(Book.class);
         DocumentQuery.DocumentQueryBuilder query = DocumentQuery.builder();
         query = query.select().from("Book");
 
-        // DocumentQuery test = query.select().from("Book").where()
+         DocumentQuery.DocumentQueryBuilder test = query.select().from("Book");
 
         if (Objects.nonNull(genre)){
-            // query = query.where("genre").eq(genre);
+             query = test.where("id").eq(genre);
         }
         if (!author.isBlank() && !author.isEmpty()) {
-            // queryWhere = queryWhere.or("author").eq(author);
+             queryWhere = queryWhere.or("author").eq(author);
         }
+                template.select(Book.class)
+                .where("id")
+                .gte(10)
+                .result();
+
+        */
         return books;
+    }
+
+    @Override
+    public Book insertNewBook(Book book) {
+
+        return template.insert(book);
     }
 }

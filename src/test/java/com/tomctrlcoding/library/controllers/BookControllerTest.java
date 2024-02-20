@@ -3,6 +3,7 @@ package com.tomctrlcoding.library.controllers;
 import com.tomctrlcoding.library.model.Book;
 import com.tomctrlcoding.library.model.Genre;
 import com.tomctrlcoding.library.services.BookServiceInterface;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,8 +38,8 @@ public class BookControllerTest {
     }
 
     private List<Book> bookList(){
-        Book book1 = new Book("1", "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789");
-        Book book2 = new Book("2", "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788");
+        Book book1 = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789");
+        Book book2 = new Book(new ObjectId(), "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788");
 
         List<Book> books= new ArrayList<>();
         books.add(book1);

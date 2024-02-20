@@ -7,6 +7,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,14 @@ public class BookController {
     public List<Book> findBooksByGenre(@QueryParam("genre") Genre genre, @QueryParam("author") String author){
         logger.info("QueryParams = {} , {}", author, genre);
         return bookService.findBooksByQueryParams(author, genre);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response insertNewBook(Book book) {
+        var newBook = bookService.insertNewBook(book);
+        return Response.status(Response.Status.CREATED).entity(newBook).build();
     }
 
 }
