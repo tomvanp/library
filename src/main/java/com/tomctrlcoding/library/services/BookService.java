@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.nosql.QueryMapper;
 import jakarta.nosql.document.DocumentTemplate;
+import org.bson.types.ObjectId;
 import org.eclipse.jnosql.communication.document.DocumentCondition;
 import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.mapping.Database;
@@ -34,7 +35,7 @@ public class BookService implements BookServiceInterface{
     }
 
     @Override
-    public Book findBookById(String id) {
+    public Book findBookById(ObjectId id) {
         return bookRepository.findById(id).orElseThrow();
     }
 
@@ -75,5 +76,9 @@ public class BookService implements BookServiceInterface{
     public Book insertNewBook(Book book) {
 
         return template.insert(book);
+    }
+    @Override
+    public void deleteBook(ObjectId bookId) {
+        template.delete(Book.class, bookId);
     }
 }

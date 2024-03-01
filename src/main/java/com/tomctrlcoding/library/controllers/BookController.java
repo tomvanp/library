@@ -8,6 +8,7 @@ import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.bson.types.ObjectId;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class BookController {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Book findBookById(@PathParam("id") String id){
+    public Book findBookById(@PathParam("id") ObjectId id){
         return bookService.findBookById(id);
     }
 
@@ -56,6 +57,14 @@ public class BookController {
     public Response insertNewBook(Book book) {
         var newBook = bookService.insertNewBook(book);
         return Response.status(Response.Status.CREATED).entity(newBook).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteBookById(@PathParam("id") ObjectId id) {
+         bookService.deleteBook(id);
+         return Response.status(Response.Status.OK).build();
     }
 
 }
