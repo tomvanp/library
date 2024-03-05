@@ -12,6 +12,8 @@ import org.eclipse.jnosql.communication.document.DocumentCondition;
 import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.mapping.Database;
 import org.eclipse.jnosql.mapping.DatabaseType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +21,7 @@ import java.util.Objects;
 @ApplicationScoped
 public class BookService implements BookServiceInterface{
 
-    // Logger logger = Logger.getLogger("BookService");
+    Logger logger = LoggerFactory.getLogger("BookService");
     @Inject
     @Database(DatabaseType.DOCUMENT)
     private BookRepositoryI bookRepository;
@@ -30,8 +32,7 @@ public class BookService implements BookServiceInterface{
     @Override
     public List<Book> getAllBooks() {
         var bookStream = bookRepository.findAll();
-        List<Book> books = bookStream.toList();
-        return books;
+        return bookStream.toList();
     }
 
     @Override
@@ -41,8 +42,7 @@ public class BookService implements BookServiceInterface{
 
     @Override
     public List<Book> findBooksByGenre(Genre genre) {
-        List<Book> books = template.select(Book.class).where("genre").eq(genre).result();
-        return books;
+        return template.select(Book.class).where("genre").eq(genre).result();
     }
 
     @Override

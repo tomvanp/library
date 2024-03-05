@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.YearDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.YearSerializer;
+import com.tomctrlcoding.library.validation.constraints.ISBN;
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.bson.types.ObjectId;
 
 import java.time.Year;
@@ -34,11 +33,16 @@ public record Book(@Id
                    String publisher,
                    @JsonDeserialize(using = YearDeserializer.class)
                    @JsonSerialize(using = YearSerializer.class)
-                   @Column("publishYear") Year publishYear,
+                   @PastOrPresent
+                   @Column("publishYear")
+                   Year publishYear,
                    @Column("isbn")
                    @NotEmpty @NotBlank
+                   @ISBN(message = "Invalid ISBN. Check size is 10 or 13 digits. Exclude the text 'ISBN'.")
+                   @Size(max = 20)
                    String isbn,
-                   @Column("review") Review review)
+                   @Column("review")
+                   Review review)
 
 {
 

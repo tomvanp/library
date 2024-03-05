@@ -28,12 +28,13 @@ public class BookServiceTest {
     private BookService bookService;
 
     @Test
-    void testGetAllBooks(){
-        when(bookRepo.findAll()).thenReturn(bookList().stream());
+     void testGetAllBooks(){
+        List<Book> books = bookList();
+        when(bookRepo.findAll()).thenReturn(books.stream());
 
         var result = bookService.getAllBooks();
 
-        assertIterableEquals(result, bookList());
+        assertIterableEquals(result, books);
 
         verify(bookRepo).findAll();
     }

@@ -12,13 +12,14 @@ import java.util.Objects;
 
 public record Review (
         @Column
+        @Size(max = 200, message = "Review has a 200 character limit")
+        @NotBlank @NotEmpty
         String review,
         @Column
-        @Min(value = 1)
-        @Max(value = 5)
+        @Min(value = 0, message = "A rating has a minimum value of 0")
+        @Max(value = 5, message = "A rating has a maximum value of 5")
         int rating,
         @Column
-        @FutureOrPresent
         @JsonDeserialize(using = LocalDateDeserializer.class)
         @JsonSerialize(using = LocalDateSerializer.class)
         LocalDate reviewDate

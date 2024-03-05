@@ -26,13 +26,15 @@ public class BookControllerTest {
     @InjectMocks
     private BookController bookController;
 
+
     @Test
     void getAllBooksTest(){
-        when(bookService.getAllBooks()).thenReturn(bookList());
+        var bookList = bookList();
+        when(bookService.getAllBooks()).thenReturn(bookList);
 
         var books = bookController.getAllBooks();
 
-        assertIterableEquals(books, bookList());
+        assertIterableEquals(books, bookList);
 
         verify(bookService).getAllBooks();
     }
