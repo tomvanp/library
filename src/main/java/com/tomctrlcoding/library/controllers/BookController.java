@@ -18,36 +18,40 @@ import java.util.List;
 @Singleton
 public class BookController {
 
-    private static Logger logger = LoggerFactory.getLogger(BookController.class);
+    private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Inject
     BookServiceInterface bookService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    public Response getAllBooks() {
+        List<Book> allBooks = bookService.getAllBooks();
+        return Response.status(Response.Status.OK).entity(allBooks).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Book findBookById(@PathParam("id") ObjectId id){
-        return bookService.findBookById(id);
+    public Response findBookById(@PathParam("id") ObjectId id){
+        Book book = bookService.findBookById(id);
+        return Response.status(Response.Status.OK).entity(book).build();
     }
 
     @GET
     @Path("/genre")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Book> findBooksByGenre(@QueryParam("genre") Genre genre){
-        return bookService.findBooksByGenre(genre);
+    public Response findBooksByGenre(@QueryParam("genre") Genre genre){
+        List<Book> allBooks = bookService.findBooksByGenre(genre);
+        return Response.status(Response.Status.OK).entity(allBooks).build();
     }
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Book> findBooksByGenre(@QueryParam("genre") Genre genre, @QueryParam("author") String author){
+    public Response findBooksByGenre(@QueryParam("genre") Genre genre, @QueryParam("author") String author){
         logger.info("QueryParams = {} , {}", author, genre);
-        return bookService.findBooksByQueryParams(author, genre);
+        List<Book> allBooks = bookService.findBooksByQueryParams(author, genre);
+        return Response.status(Response.Status.OK).entity(allBooks).build();
     }
 
     @POST
