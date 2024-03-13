@@ -12,7 +12,9 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Year;
 import java.util.List;
+import java.util.Objects;
 
 @Path("/books")
 @Singleton
@@ -22,6 +24,11 @@ public class BookController {
 
     @Inject
     BookServiceInterface bookService;
+
+    /*
+    *  private static final Supplier<WebApplicationException> NOT_FOUND =
+         () -> new WebApplicationException(Response.Status.NOT_FOUND);
+    */
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,9 +55,15 @@ public class BookController {
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findBooksByGenre(@QueryParam("genre") Genre genre, @QueryParam("author") String author){
+    public Response findBooksByQueryParam(@QueryParam("title") String title,
+                                        @QueryParam("genre") Genre genre,
+                                        @QueryParam("author") String author,
+                                        @QueryParam("publisher") String publisher,
+                                        @QueryParam("publishYear") String publishYear,
+                                        @QueryParam("andCheck") boolean andCheck){
+
         logger.info("QueryParams = {} , {}", author, genre);
-        List<Book> allBooks = bookService.findBooksByQueryParams(author, genre);
+        List<Book> allBooks = bookService.findBooksByQueryParams(title, author, genre, publisher, publishYear, andCheck);
         return Response.status(Response.Status.OK).entity(allBooks).build();
     }
 

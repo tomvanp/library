@@ -19,29 +19,29 @@ import java.util.Objects;
 public record Book(@Id
                    @JsonSerialize(using = ToStringSerializer.class)
                    ObjectId id,
-                   @Column("title")
+                   @Column
                    @NotEmpty @NotBlank
                    String title,
-                   @Column("author")
+                   @Column
                    @NotEmpty @NotBlank
                    String author,
-                   @Column("genre")
+                   @Column
                    @NotNull
                    Genre genre,
-                   @Column("publisher")
+                   @Column
                    @NotEmpty @NotBlank
                    String publisher,
                    @JsonDeserialize(using = YearDeserializer.class)
                    @JsonSerialize(using = YearSerializer.class)
                    @PastOrPresent
-                   @Column("publishYear")
+                   @Column
                    Year publishYear,
-                   @Column("isbn")
+                   @Column
                    @NotEmpty @NotBlank
                    @ISBN(message = "Invalid ISBN. Check size is 10 or 13 digits. Exclude the text 'ISBN'.")
                    @Size(max = 20)
                    String isbn,
-                   @Column("review")
+                   @Column
                    Review review)
 
 {

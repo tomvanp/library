@@ -8,13 +8,15 @@ import jakarta.inject.Inject;
 import jakarta.nosql.QueryMapper;
 import jakarta.nosql.document.DocumentTemplate;
 import org.bson.types.ObjectId;
-import org.eclipse.jnosql.communication.document.DocumentCondition;
+import org.eclipse.jnosql.communication.Condition;
 import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.mapping.Database;
 import org.eclipse.jnosql.mapping.DatabaseType;
+import org.eclipse.jnosql.mapping.document.query.DynamicQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Year;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +29,13 @@ public class BookService implements BookServiceInterface{
     private BookRepositoryI bookRepository;
 
     @Inject
-    DocumentTemplate template;
+    private DocumentTemplate template;
+
+    @Inject
+    QueryBuilder queryBuilder;
+
+   // @Inject
+    //private CriteriaDocumentTemplate docTemp;
 
     @Override
     public List<Book> getAllBooks() {
@@ -41,35 +49,28 @@ public class BookService implements BookServiceInterface{
     }
 
     @Override
+    public Book findBookByISBN(String isbn) {
+        return null;
+    }
+
+    @Override
     public List<Book> findBooksByGenre(Genre genre) {
         return template.select(Book.class).where("genre").eq(genre).result();
     }
 
     @Override
-    public List<Book> findBooksByQueryParams(String author, Genre genre) {
-        List<Book> books = bookRepository.findByAuthorOrGenre(author, genre);
+    public List<Book> findBooksByQueryParams(String title,
+                                             String author,
+                                             Genre genre,
+                                             String publisher,
+                                             String publishYear,
+                                             boolean andCheck) {
 
+        var select = template.select(Book.class);
+        var query = queryBuilder.buildBookQuery(select, title, author, genre, publisher, publishYear, andCheck);
 
-        //TODO experiment with this DocumentQuery builder and figure out DocumentCondition
-/*        var queryFrom = template.select(Book.class);
-        DocumentQuery.DocumentQueryBuilder query = DocumentQuery.builder();
-        query = query.select().from("Book");
+        return queryBuilder.result(query);
 
-         DocumentQuery.DocumentQueryBuilder test = query.select().from("Book");
-
-        if (Objects.nonNull(genre)){
-             query = test.where("id").eq(genre);
-        }
-        if (!author.isBlank() && !author.isEmpty()) {
-             queryWhere = queryWhere.or("author").eq(author);
-        }
-                template.select(Book.class)
-                .where("id")
-                .gte(10)
-                .result();
-
-        */
-        return books;
     }
 
     @Override

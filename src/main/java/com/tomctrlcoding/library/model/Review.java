@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
 public record Review (
         @Column
         @Size(max = 200, message = "Review has a 200 character limit")
