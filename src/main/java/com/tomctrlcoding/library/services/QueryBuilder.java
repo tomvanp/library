@@ -3,6 +3,7 @@ package com.tomctrlcoding.library.services;
 import com.tomctrlcoding.library.model.Book;
 import com.tomctrlcoding.library.model.Genre;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.nosql.QueryMapper;
 import jakarta.validation.constraints.NotNull;
 
