@@ -12,9 +12,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Year;
 import java.util.List;
-import java.util.Objects;
 
 @Path("/books")
 @Singleton
@@ -45,13 +43,6 @@ public class BookController {
         return Response.status(Response.Status.OK).entity(book).build();
     }
 
-    @GET
-    @Path("/genre")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response findBooksByGenre(@QueryParam("genre") Genre genre){
-        List<Book> allBooks = bookService.findBooksByGenre(genre);
-        return Response.status(Response.Status.OK).entity(allBooks).build();
-    }
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)

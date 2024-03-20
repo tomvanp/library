@@ -3,13 +3,16 @@ package com.tomctrlcoding.library.services;
 import com.tomctrlcoding.library.model.Book;
 import com.tomctrlcoding.library.model.Genre;
 import com.tomctrlcoding.library.repositories.BookRepositoryI;
-import jakarta.inject.Inject;
+import jakarta.nosql.QueryMapper;
 import jakarta.nosql.document.DocumentTemplate;
+import jakarta.ws.rs.NotFoundException;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Year;
@@ -29,14 +32,11 @@ public class BookServiceTest {
     @Mock
     private DocumentTemplate template;
 
+    @Mock
+    private QueryBuilder queryBuilder;
+
     @InjectMocks
     private BookService bookService;
-
-    @Test
-    void testCriteriaDocumentTemplate() {
-
-
-    }
 
     @Test
      void testGetAllBooks(){
@@ -45,7 +45,7 @@ public class BookServiceTest {
 
         var result = bookService.getAllBooks();
 
-        assertIterableEquals(result, books);
+        assertIterableEquals(books, result);
 
         verify(bookRepo).findAll();
     }
@@ -53,33 +53,102 @@ public class BookServiceTest {
     @Test
     void testFindBookByID(){
         var id = new ObjectId();
-        Book book = new Book(id, "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
-
+        Book book = createTestBook(id);
         when(bookRepo.findById(id)).thenReturn(Optional.of(book));
 
         var result = bookService.findBookById(id);
 
-        assertEquals(result, book);
+        assertEquals(book, result);
 
         verify(bookRepo).findById(id);
     }
 
+    /**
+     * Issue with this test is the fact that a mock returns another mock
+     * this is because QueryMapper class is difficult to mock
+     */
+    @Test
+    void testFindBookByISBN() {
+        var id = new ObjectId();
+        Book book = createTestBook(id);
+
+        var from = Mockito.mock(QueryMapper.MapperFrom.class);
+        var where = Mockito.mock(QueryMapper.MapperWhere.class);
+        var condition = Mockito.mock(QueryMapper.MapperNameCondition.class);
+        when(template.select(Book.class)).thenReturn(from);
+        when(from.where(anyString())).thenReturn(condition);
+        when(condition.eq(anyString())).thenReturn(where);
+        when(where.singleResult()).thenReturn(Optional.of(book));
+
+        var result = bookService.findBookByISBN("978-0-5521-3325-8");
+
+        assertEquals(book, result);
+    }
+
+    /**
+     * Issue with this test is the fact that a mock returns another mock
+     * this is because QueryMapper class is difficult to mock
+     */
+    @Test
+    void testFindBookByISBNNotFoundException() {
+
+        var from = Mockito.mock(QueryMapper.MapperFrom.class);
+        var where = Mockito.mock(QueryMapper.MapperWhere.class);
+        var condition = Mockito.mock(QueryMapper.MapperNameCondition.class);
+        when(template.select(Book.class)).thenReturn(from);
+        when(from.where(anyString())).thenReturn(condition);
+        when(condition.eq(anyString())).thenReturn(where);
+        when(where.singleResult()).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            bookService.findBookByISBN("978-0-5521-3325-8");
+        }, "NotFoundException was expected");
+
+    }
+
+    /**
+     * Issue with this test is the fact that a mock returns another mock
+     * this is because QueryMapper class is difficult to mock
+     */
+    @Test
+    void testQueryBooksAllParams() {
+        var title = "Test Title";
+        var author = "John Doe";
+        var publisher = "Test Publish";
+        var genre = Genre.MYSTERY;
+        var year = "2024";
+
+        var book = createTestBook(new ObjectId());
+        List<Book> books = new ArrayList<>();
+        books.add(book);
+
+        var from = Mockito.mock(QueryMapper.MapperFrom.class);
+        var where = Mockito.mock(QueryMapper.MapperWhere.class);
+        when(template.select(Book.class)).thenReturn(from);
+        when(queryBuilder.buildBookQuery(any(QueryMapper.MapperFrom.class), anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean()))
+                .thenReturn(where);
+        when(queryBuilder.result(any(QueryMapper.MapperWhere.class))).thenReturn(books);
+
+        var result = bookService.findBooksByQueryParams(title, author, genre, publisher, year, false);
+
+        assertEquals(1, result.size());
+        verify(template, times(1)).select(Book.class);
+        verify(queryBuilder, times(1)).buildBookQuery(any(QueryMapper.MapperFrom.class), anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean());
+        verify(queryBuilder, times(1)).result(any(QueryMapper.MapperWhere.class));
+
+    }
+
     @Test
     void testInsertBook(){
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
+        Book book = createTestBook(new ObjectId());
 
         when(template.insert(book)).thenReturn(book);
 
         var result = bookService.insertNewBook(book);
 
-        assertEquals(result, book);
+        assertEquals(book, result);
 
         verify(template).insert(book);
-    }
-
-    @Test
-    void testQueryBooksAllNullParams() {
-       // var result = bookService.findBooksByQueryParams(null, null, null, null, null, false);
     }
 
     @Test
@@ -92,6 +161,15 @@ public class BookServiceTest {
         verify(template).delete(Book.class, id);
     }
 
+    private Book createTestBook(ObjectId id) {
+        var title = "Test Title";
+        var author = "John Doe";
+        var publisher = "Test Publish";
+        var genre = Genre.MYSTERY;
+        var year = "2024";
+
+        return new Book(id, title, author, genre, publisher, Year.parse(year), "978-0-5521-3325-8", null);
+    }
     private List<Book> bookList(){
         Book book1 = new Book(new ObjectId(), "Test Title 1", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
         Book book2 = new Book(new ObjectId(), "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788", null);
