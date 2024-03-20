@@ -29,7 +29,7 @@ public class BookService implements BookServiceInterface{
     private DocumentTemplate template;
 
     @Inject
-    QueryBuilder queryBuilder;
+    private QueryBuilder queryBuilder;
 
    // @Inject
     //private CriteriaDocumentTemplate docTemp;

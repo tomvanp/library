@@ -29,56 +29,106 @@ public class BookControllerTest {
 
 
     @Test
-    void getAllBooksTest(){
+    void testGetAllBooks(){
         var bookList = bookList();
         when(bookService.getAllBooks()).thenReturn(bookList);
 
         var response = bookController.getAllBooks();
 
-        assertEquals(response.getEntity(), bookList);
+        assertEquals(bookList, response.getEntity());
 
         verify(bookService).getAllBooks();
     }
 
     @Test
-    void getBookByIdTest() {
+    void testGetBookById() {
         var id = new ObjectId();
-        Book book = new Book(id, "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
-
+        Book book = createTestBook(id);
         when(bookService.findBookById(id)).thenReturn(book);
 
-        var response = bookController.findBookById(id);
+        try (var response = bookController.findBookById(id)) {
 
-        assertEquals(response.getEntity(), book);
+            assertEquals(book, response.getEntity());
+        }
 
         verify(bookService).findBookById(id);
     }
 
     @Test
-    void insertNewBookTest(){
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
+    void testQueryBooksByParams() {
+        var title = "Test Title";
+        var author = "John Doe";
+        var genre = Genre.MYSTERY;
+        var publisher = "Test Publish";
+        var year = "2024";
 
+        var books = bookList();
+
+        when(bookService.findBooksByQueryParams(anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean())).thenReturn(books);
+
+        try (var response = bookController.findBooksByQueryParam(title, author, genre, publisher, year, false)) {
+            assertEquals(books, response.getEntity());
+        }
+
+        verify(bookService).findBooksByQueryParams(anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean());
+    }
+
+    @Test
+    void testQueryBooksByParamsNoBooksFound() {
+        var title = "Test Title";
+        var author = "John Doe";
+        var genre = Genre.MYSTERY;
+        var publisher = "Test Publish";
+        var year = "2024";
+
+        List<Book> books = new ArrayList<>();
+
+        when(bookService.findBooksByQueryParams(anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean())).thenReturn(books);
+
+        try (var response = bookController.findBooksByQueryParam(title, author, genre, publisher, year, false)) {
+            assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
+        }
+
+        verify(bookService).findBooksByQueryParams(anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean());
+    }
+
+    @Test
+    void testInsertNewBook(){
+        Book book = createTestBook(new ObjectId());
         when(bookService.insertNewBook(book)).thenReturn(book);
 
-        var response = bookController.insertNewBook(book);
+        try (var response = bookController.insertNewBook(book)) {
 
-        assertEquals(response.getEntity(), book);
+            assertEquals(book, response.getEntity());
+        }
 
         verify(bookService).insertNewBook(book);
     }
 
     @Test
-    void deleteBookTest(){
+    void testDeleteBook(){
         var id = new ObjectId();
 
         doNothing().when(bookService).deleteBook(id);
 
-        var response = bookController.deleteBookById(id);
+        try (var response = bookController.deleteBookById(id)) {
 
-        assertEquals(response.getStatusInfo(), Response.Status.OK);
+            assertEquals(Response.Status.OK, response.getStatusInfo());
+        }
 
         verify(bookService).deleteBook(id);
 
+    }
+
+    private Book createTestBook(ObjectId id) {
+        var title = "Test Title";
+        var author = "John Doe";
+        var publisher = "Test Publish";
+        var genre = Genre.MYSTERY;
+        var year = "2024";
+        var isbn = "978-0-5521-3325-8";
+
+        return new Book(id, title, author, genre, publisher, Year.parse(year), isbn, null);
     }
 
     private List<Book> bookList(){

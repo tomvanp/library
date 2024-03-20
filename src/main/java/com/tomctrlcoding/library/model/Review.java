@@ -11,7 +11,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity
+@Entity("Reviews")
 public record Review (
         @Column
         @Size(max = 200, message = "Review has a 200 character limit")

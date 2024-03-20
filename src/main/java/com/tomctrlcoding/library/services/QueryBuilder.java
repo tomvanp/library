@@ -3,16 +3,17 @@ package com.tomctrlcoding.library.services;
 import com.tomctrlcoding.library.model.Book;
 import com.tomctrlcoding.library.model.Genre;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.nosql.QueryMapper;
 
 import java.time.Year;
 import java.util.List;
 import java.util.Objects;
 
-@ApplicationScoped
+@RequestScoped
 class QueryBuilder {
 
-    private QueryMapper.MapperWhere query;
+    private QueryMapper.MapperWhere query = null;
 
     public QueryMapper.MapperWhere buildBookQuery(QueryMapper.MapperFrom select,
                                               String title,

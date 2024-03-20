@@ -21,7 +21,7 @@ public class BookController {
     private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Inject
-    BookServiceInterface bookService;
+    private BookServiceInterface bookService;
 
     /*
     *  private static final Supplier<WebApplicationException> NOT_FOUND =
@@ -32,7 +32,7 @@ public class BookController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllBooks() {
         List<Book> allBooks = bookService.getAllBooks();
-        return Response.status(Response.Status.OK).entity(allBooks).build();
+        return Response.ok().entity(allBooks).build();
     }
 
     @GET
@@ -40,22 +40,26 @@ public class BookController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findBookById(@PathParam("id") ObjectId id){
         Book book = bookService.findBookById(id);
-        return Response.status(Response.Status.OK).entity(book).build();
+        return Response.ok().entity(book).build();
     }
 
     @GET
     @Path("/query")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findBooksByQueryParam(@QueryParam("title") String title,
-                                        @QueryParam("genre") Genre genre,
                                         @QueryParam("author") String author,
+                                        @QueryParam("genre") Genre genre,
                                         @QueryParam("publisher") String publisher,
                                         @QueryParam("publishYear") String publishYear,
                                         @QueryParam("andCheck") boolean andCheck){
 
         logger.info("QueryParams = {} , {}", author, genre);
-        List<Book> allBooks = bookService.findBooksByQueryParams(title, author, genre, publisher, publishYear, andCheck);
-        return Response.status(Response.Status.OK).entity(allBooks).build();
+        List<Book> foundBooks = bookService.findBooksByQueryParams(title, author, genre, publisher, publishYear, andCheck);
+        if (foundBooks.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).entity(foundBooks).build();
+        }
+
+        return Response.ok().entity(foundBooks).build();
     }
 
     @POST
@@ -71,7 +75,7 @@ public class BookController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteBookById(@PathParam("id") ObjectId id) {
          bookService.deleteBook(id);
-         return Response.status(Response.Status.OK).build();
+         return Response.ok().build();
     }
 
 }
