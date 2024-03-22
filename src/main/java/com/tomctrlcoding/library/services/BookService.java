@@ -42,7 +42,7 @@ public class BookService implements BookServiceInterface{
 
     @Override
     public Book findBookById(ObjectId id) {
-        return bookRepository.findById(id).orElseThrow();
+        return bookRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override

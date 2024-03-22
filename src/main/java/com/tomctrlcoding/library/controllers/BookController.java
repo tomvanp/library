@@ -39,8 +39,25 @@ public class BookController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findBookById(@PathParam("id") ObjectId id){
-        Book book = bookService.findBookById(id);
-        return Response.ok().entity(book).build();
+        try {
+            Book book = bookService.findBookById(id);
+            return Response.ok().entity(book).build();
+        } catch (NotFoundException ex) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+    }
+
+    @GET
+    @Path("/isbn/{isbn}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findBookByISBN(@PathParam("isbn") String isbn){
+        try {
+            Book book = bookService.findBookByISBN(isbn);
+            return Response.ok().entity(book).build();
+        } catch (NotFoundException ex) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @GET
@@ -53,11 +70,7 @@ public class BookController {
                                         @QueryParam("publishYear") String publishYear,
                                         @QueryParam("andCheck") boolean andCheck){
 
-        logger.info("QueryParams = {} , {}", author, genre);
         List<Book> foundBooks = bookService.findBooksByQueryParams(title, author, genre, publisher, publishYear, andCheck);
-        if (foundBooks.isEmpty()) {
-            return Response.status(Response.Status.NO_CONTENT).entity(foundBooks).build();
-        }
 
         return Response.ok().entity(foundBooks).build();
     }

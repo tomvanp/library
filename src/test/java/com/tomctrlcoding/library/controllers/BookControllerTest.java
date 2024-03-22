@@ -3,6 +3,7 @@ package com.tomctrlcoding.library.controllers;
 import com.tomctrlcoding.library.model.Book;
 import com.tomctrlcoding.library.model.Genre;
 import com.tomctrlcoding.library.services.BookServiceInterface;
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
@@ -55,6 +56,42 @@ public class BookControllerTest {
     }
 
     @Test
+    void testGetBookByIDNotFound() {
+        when(bookService.findBookById(any(ObjectId.class))).thenThrow(NotFoundException.class);
+
+        try (var response = bookController.findBookById(new ObjectId())) {
+            assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
+        }
+
+        verify(bookService, times(1)).findBookById(any(ObjectId.class));
+    }
+
+    @Test
+    void testGetBookByISBN() {
+        var id = new ObjectId();
+        Book book = createTestBook(id);
+        when(bookService.findBookByISBN(anyString())).thenReturn(book);
+
+        try (var response = bookController.findBookByISBN("978-0-5521-3325-8")) {
+
+            assertEquals(book, response.getEntity());
+        }
+
+        verify(bookService, times(1)).findBookByISBN(anyString());
+    }
+
+    @Test
+    void testGetBookByISBNNotFound() {
+        when(bookService.findBookByISBN(anyString())).thenThrow(NotFoundException.class);
+
+        try (var response = bookController.findBookByISBN("978-0-5521-3325-8")) {
+            assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
+        }
+
+        verify(bookService, times(1)).findBookByISBN(anyString());
+    }
+
+    @Test
     void testQueryBooksByParams() {
         var title = "Test Title";
         var author = "John Doe";
@@ -86,9 +123,8 @@ public class BookControllerTest {
         when(bookService.findBooksByQueryParams(anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean())).thenReturn(books);
 
         try (var response = bookController.findBooksByQueryParam(title, author, genre, publisher, year, false)) {
-            assertEquals(Response.Status.NOT_FOUND, response.getStatusInfo());
+            assertEquals(0, ((ArrayList<Book>)response.getEntity()).size());
         }
-
         verify(bookService).findBooksByQueryParams(anyString(), anyString(), any(Genre.class), anyString(), anyString(), anyBoolean());
     }
 
@@ -117,7 +153,6 @@ public class BookControllerTest {
         }
 
         verify(bookService).deleteBook(id);
-
     }
 
     private Book createTestBook(ObjectId id) {
