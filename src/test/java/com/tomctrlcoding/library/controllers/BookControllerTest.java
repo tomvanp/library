@@ -2,7 +2,7 @@ package com.tomctrlcoding.library.controllers;
 
 import com.tomctrlcoding.library.model.Book;
 import com.tomctrlcoding.library.model.Genre;
-import com.tomctrlcoding.library.services.BookServiceInterface;
+import com.tomctrlcoding.library.services.BookService;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import org.bson.types.ObjectId;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class BookControllerTest {
 
     @Mock
-    private BookServiceInterface bookService;
+    private BookService bookService;
 
     @InjectMocks
     private BookController bookController;
