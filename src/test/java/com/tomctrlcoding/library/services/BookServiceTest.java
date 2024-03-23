@@ -168,15 +168,15 @@ public class BookServiceTest {
         var genre = Genre.MYSTERY;
         var year = "2024";
 
-        return new Book(id, title, author, genre, publisher, Year.parse(year), "978-0-5521-3325-8", null);
+        return new Book(id, title, author, genre, publisher, Year.parse(year), "978-0-5521-3325-8");
     }
     private List<Book> bookList(){
-        Book book1 = new Book(new ObjectId(), "Test Title 1", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
-        Book book2 = new Book(new ObjectId(), "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788", null);
-        Book book3 = new Book(new ObjectId(), "Test Title 3", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
-        Book book4 = new Book(new ObjectId(), "Test Title 4", "Jane Doe", Genre.SCIFI, "Fake Publish", Year.of(2021), "0123456788", null);
-        Book book5 = new Book(new ObjectId(), "Test Title 5", "John Doe", Genre.CRIME, "Fake Publish", Year.of(2020), "0123456789", null);
-        Book book6 = new Book(new ObjectId(), "Test Title 6", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788", null);
+        Book book1 = new Book(new ObjectId(), "Test Title 1", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789");
+        Book book2 = new Book(new ObjectId(), "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788");
+        Book book3 = new Book(new ObjectId(), "Test Title 3", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789");
+        Book book4 = new Book(new ObjectId(), "Test Title 4", "Jane Doe", Genre.SCIFI, "Fake Publish", Year.of(2021), "0123456788");
+        Book book5 = new Book(new ObjectId(), "Test Title 5", "John Doe", Genre.CRIME, "Fake Publish", Year.of(2020), "0123456789");
+        Book book6 = new Book(new ObjectId(), "Test Title 6", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788");
 
         List<Book> books= new ArrayList<>();
         books.add(book1);

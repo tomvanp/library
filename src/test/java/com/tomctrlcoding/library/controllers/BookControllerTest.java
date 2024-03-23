@@ -163,12 +163,12 @@ public class BookControllerTest {
         var year = "2024";
         var isbn = "978-0-5521-3325-8";
 
-        return new Book(id, title, author, genre, publisher, Year.parse(year), isbn, null);
+        return new Book(id, title, author, genre, publisher, Year.parse(year), isbn);
     }
 
     private List<Book> bookList(){
-        Book book1 = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789", null);
-        Book book2 = new Book(new ObjectId(), "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788", null);
+        Book book1 = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2020), "0123456789");
+        Book book2 = new Book(new ObjectId(), "Test Title 2", "Jane Doe", Genre.DRAMA, "Fake Publish", Year.of(2021), "0123456788");
 
         List<Book> books= new ArrayList<>();
         books.add(book1);

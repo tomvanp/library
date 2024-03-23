@@ -40,9 +40,7 @@ public record Book(@Id
                    @NotEmpty @NotBlank
                    @ISBN(message = "Invalid ISBN. Check size is 10 or 13 digits. Exclude the text 'ISBN'.")
                    @Size(max = 20)
-                   String isbn,
-                   @Column
-                   Review review)
+                   String isbn)
 
 {
 

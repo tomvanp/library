@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class ReviewTest {
 
     @Test
     public void testValidReviewNullDate(){
-        Review review = new Review("This is a review", 3, null);
+        Review review = new Review(new ObjectId(), "1", "This is a review", 3, null);
 
         Set<ConstraintViolation<Review>> violations = validator.validate(review);
         logger.info("testValidReviewNullDate : Found violations: {}", violations);
@@ -41,7 +42,7 @@ public class ReviewTest {
 
     @Test
     public void testValidReview(){
-        Review review = new Review("This is a review", 3, LocalDate.now());
+        Review review = new Review(new ObjectId(), "1","This is a review", 3, LocalDate.now());
 
         Set<ConstraintViolation<Review>> violations = validator.validate(review);
         logger.info("testValidReviewNullDate : Found violations: {}", violations);
@@ -51,7 +52,7 @@ public class ReviewTest {
 
     @Test
     public void testInValidReviewEmptyReview(){
-        Review review = new Review("", 3, LocalDate.now());
+        Review review = new Review(new ObjectId(), "1","", 3, LocalDate.now());
 
         Set<ConstraintViolation<Review>> violations = validator.validate(review);
         logger.info("testInValidReviewEmptyReview : Found violations: {}", violations);
@@ -81,7 +82,7 @@ public class ReviewTest {
                 quis varius elit rhoncus non. Nam sodales, enim eu convallis sagittis, tellus lacus tempus quam, et posuere lectus ex in mauris. Aenean hendrerit, magna sit amet consequat suscipit,
                 nisl nulla consectetur neque, lobortis laoreet lorem odio.\s""";
 
-        Review review = new Review(reviewText300Characters, 3, LocalDate.now());
+        Review review = new Review(new ObjectId(), "1",reviewText300Characters, 3, LocalDate.now());
 
         Set<ConstraintViolation<Review>> violations = validator.validate(review);
         logger.info("testInValidReviewEmptyReview : Found violations: {}", violations);
@@ -92,7 +93,7 @@ public class ReviewTest {
 
     @Test
     public void testInValidReviewWrongRating(){
-        Review review = new Review("This is a review", 6, LocalDate.now());
+        Review review = new Review(new ObjectId(), "1","This is a review", 6, LocalDate.now());
 
         Set<ConstraintViolation<Review>> violations = validator.validate(review);
         logger.info("testInValidReviewEmptyReview : Found violations: {}", violations);
@@ -103,7 +104,7 @@ public class ReviewTest {
 
     @Test
     public void testInValidReviewNegativeRating(){
-        Review review = new Review("This is a review", -1, LocalDate.now());
+        Review review = new Review(new ObjectId(), "1","This is a review", -1, LocalDate.now());
 
         Set<ConstraintViolation<Review>> violations = validator.validate(review);
         logger.info("testInValidReviewEmptyReview : Found violations: {}", violations);

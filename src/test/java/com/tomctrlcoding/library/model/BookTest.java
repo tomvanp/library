@@ -32,7 +32,7 @@ public class BookTest {
 
     @Test
     public void testValidBook() {
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8", null);
+        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8");
 
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         logger.info("testValidBook : Found violations: {}", violations);
@@ -42,7 +42,7 @@ public class BookTest {
 
     @Test
     public void testValidBookNullId() {
-        Book book = new Book(null, "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8", null);
+        Book book = new Book(null, "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8");
 
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         logger.info("testValidBookNullId : Found violations: {}", violations);
@@ -52,7 +52,7 @@ public class BookTest {
 
     @Test
     public void testInvalidBookEmptyTitle() {
-        Book book = new Book(new ObjectId(), "", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8", null);
+        Book book = new Book(new ObjectId(), "", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
 
         logger.info("testInvalidBookEmptyTitle : Found violations: {}", violations);
@@ -64,7 +64,7 @@ public class BookTest {
 
     @Test
     public void testInvalidBookEmptyAuthor() {
-        Book book = new Book(new ObjectId(), "Test Title", "", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8", null);
+        Book book = new Book(new ObjectId(), "Test Title", "", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-8");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
 
         assertFalse(violations.isEmpty());
@@ -73,7 +73,7 @@ public class BookTest {
 
     @Test
     public void testInvalidBookNullGenre() {
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", null, "Fake Publish", Year.of(2024), "978-0-5521-3325-8", null);
+        Book book = new Book(new ObjectId(), "Test Title", "John Doe", null, "Fake Publish", Year.of(2024), "978-0-5521-3325-8");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
 
         assertFalse(violations.isEmpty());
@@ -82,7 +82,7 @@ public class BookTest {
 
     @Test
     public void testInvalidBookEmptyPublisher() {
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "", Year.of(2024), "978-0-5521-3325-8", null);
+        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "", Year.of(2024), "978-0-5521-3325-8");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
 
         assertFalse(violations.isEmpty());
@@ -91,7 +91,7 @@ public class BookTest {
 
     @Test
     public void testInvalidBookISBNWrongCheckNumber() {
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-1", null);
+        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-5521-3325-1");
 
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         logger.info("Found violations: {}", violations);
@@ -102,7 +102,7 @@ public class BookTest {
 
     @Test
     public void testInValidBookFutureDate() {
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2025), "978-0-5521-3325-8", null);
+        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2025), "978-0-5521-3325-8");
 
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         logger.info("Found violations: {}", violations);
@@ -113,7 +113,7 @@ public class BookTest {
 
     @Test
     public void testInvalidBookISBNWrongSize() {
-        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-551-335-8", null);
+        Book book = new Book(new ObjectId(), "Test Title", "John Doe", Genre.MYSTERY, "Fake Publish", Year.of(2024), "978-0-551-335-8");
 
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         logger.info("Found violations: {}", violations);
