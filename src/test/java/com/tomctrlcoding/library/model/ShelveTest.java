@@ -74,27 +74,21 @@ public class ShelveTest {
     void testAddBookIdNullId() {
         var shelve = new Shelve("Test");
 
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            shelve.addBookId(null);
-        }, "NullPointerException was expected");
+        Assertions.assertThrows(NullPointerException.class, () -> shelve.addBookId(null), "NullPointerException was expected");
     }
 
     @Test
     void testAddBookIdEmptyId() {
         var shelve = new Shelve("Test");
 
-        Assertions.assertThrows(AssertionError.class, () -> {
-            shelve.addBookId("");
-        }, "AssertionError was expected");
+        Assertions.assertThrows(AssertionError.class, () -> shelve.addBookId(""), "AssertionError was expected");
     }
 
     @Test
     void testAddBookIdBlankId() {
         var shelve = new Shelve("Test");
 
-        Assertions.assertThrows(AssertionError.class, () -> {
-            shelve.addBookId(" ");
-        }, "AssertionError was expected");
+        Assertions.assertThrows(AssertionError.class, () -> shelve.addBookId(" "), "AssertionError was expected");
     }
 
     @Test
@@ -111,26 +105,20 @@ public class ShelveTest {
     void testRemoveBookIdNullId() {
         var shelve = new Shelve("Test");
 
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            shelve.removeBookId(null);
-        }, "NullPointerException was expected");
+        Assertions.assertThrows(NullPointerException.class, () -> shelve.removeBookId(null), "NullPointerException was expected");
     }
 
     @Test
     void testRemoveBookIdEmptyId() {
         var shelve = new Shelve("Test");
 
-        Assertions.assertThrows(AssertionError.class, () -> {
-            shelve.removeBookId("");
-        }, "AssertionError was expected");
+        Assertions.assertThrows(AssertionError.class, () -> shelve.removeBookId(""), "AssertionError was expected");
     }
 
     @Test
     void testRemoveBookIdBlankId() {
         var shelve = new Shelve("Test");
 
-        Assertions.assertThrows(AssertionError.class, () -> {
-            shelve.removeBookId(" ");
-        }, "AssertionError was expected");
+        Assertions.assertThrows(AssertionError.class, () -> shelve.removeBookId(" "), "AssertionError was expected");
     }
 }
